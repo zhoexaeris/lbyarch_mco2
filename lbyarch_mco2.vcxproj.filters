@@ -20,7 +20,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="samplefunc.asm">
+    <CustomBuild Include="daxpy_asm.asm">
       <Filter>Source Files</Filter>
     </CustomBuild>
   </ItemGroup>

@@ -131,11 +131,11 @@
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="samplefunc.asm">
+    <CustomBuild Include="daxpy_asm.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\NASM\nasm -f win64 samplefunc.asm</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">samplefunc.obj</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\ProgramFiles\SASM\NASM\nasm -f win64 daxpy_asm.asm</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">daxpy_asm.obj</Outputs>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 
+// x86-64 kernel function
+extern void daxpy_asm(int n, double A, double* X, double* Y, double* Z);
+
 // C kernel function
 void daxpy_c(int n, double A, double* X, double* Y, double* Z) {
     for (int i = 0; i < n; ++i) {
@@ -29,14 +32,28 @@ int main() {
     clock_t end_time = clock(); // ending run time
     double total_time = (double)(end_time - start_time) / CLOCKS_PER_SEC; // calculate total time in seconds
 
-
     // print first 10 elements of Z
     printf("Results for C version:\n");
     for (int i = 0; i < 10; ++i) {
-        printf("%.2f \n", Z[i]);
+        printf("%f \n", Z[i]);
     }
 
     printf("C Execution time: %.9f seconds\n", total_time);
+
+    //perform x86-64 kernel
+    start_time = clock();
+    for (int i = 0; i < 30; ++i) {
+        daxpy_asm (n, A, X, Y, Z);
+    }
+    end_time = clock();
+    total_time = (double)(end_time - start_time) / CLOCKS_PER_SEC; // calculate total time in seconds
+    printf("Assembly version time for n = %d: %f seconds\n", n, total_time);
+
+    printf("Assembly version output for n = %d (first 10 elements):\n", n);
+    for (int i = 0; i < 10; ++i) {
+        printf("%f \n", Z[i]);
+    }
+    printf("\n\n");
 
     // free allocated memory
     free(X);
