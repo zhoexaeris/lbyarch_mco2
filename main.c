@@ -81,7 +81,7 @@ int main() {
     print_outputs(n, Z_asm);
     
     // Validate the results 
-    printf("\n\nValidating the results...\n")
+    printf("\n\nValidating the results...\n");
     bool is_correct = true;
     for (int i = 0; i < 10; ++i) {
 		if (Z_c[i] != Z_asm[i]) {
