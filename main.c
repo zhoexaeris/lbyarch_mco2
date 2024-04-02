@@ -36,6 +36,7 @@ int main() {
     double* Y = (double*)malloc(n * sizeof(double));
     double* Z_c = (double*)malloc(n * sizeof(double));
     double* Z_asm = (double*)malloc(n * sizeof(double));
+    printf("Input A: %.1f\n", A);
 
     // Initialize X and Y for random values
     srand(time(NULL));
