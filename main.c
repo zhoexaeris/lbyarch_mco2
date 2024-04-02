@@ -26,7 +26,7 @@ void print_outputs(int n, double* Z) {
 }
 int main() {
 
-    int n = 2 << 25; // size of vector n (2^n)
+    int n = 2 << 20; // size of vector n (2^n)
 
     // Initialize variables
     double A = 2.0;
@@ -42,43 +42,50 @@ int main() {
         Y[i] = (double)rand() / RAND_MAX;
     }
 
-    // Initialize Time Variables
-    clock_t start_time, end_time;
-    double total_cpu_time_C;
-    double total_cpu_time_ASM;
-
-
     // Perform C Kernel
-    start_time = clock();
+    unsigned __int64 start_time_c, end_time_c;
+    double total_cpu_time_C;
 
-    // To Do : Create a function to call the C kernel function 30x and Change N values
+    // start clock cycle
+    start_time_c = __rdtsc();
+
     for (int i = 0; i < 30; ++i) {
         daxpy_c(n, A, X, Y, Z_c);
     }
 
-    end_time = clock();
-    total_cpu_time_C = ((double)(end_time - start_time)) / CLOCKS_PER_SEC / 30.0;
+    // end clock cycle
+    end_time_c = __rdtsc();
 
-    printf("C Execution time: %.9f seconds\n", total_cpu_time_C);
+    // compute for total clock cycle and convert to seconds
+    total_cpu_time_C = (double)(end_time_c - start_time_c) / 30.0;
+    double cpu_frequency = 2.9e9; // change to your CPU base speed
+    double execution_time_seconds_c = total_cpu_time_C / cpu_frequency;
 
     printf("C Kernel Outputs: \n");
     print_outputs(n, Z_c);
 
-    // Perform x86-64 Kernel
-    start_time = clock();
+    printf("C Total Cycles: %.9f cycles \n", total_cpu_time_C);
+    printf("C Execution time: %.9f seconds\n\n", execution_time_seconds_c);
 
-    // To Do : Create a function to call the x86-64 kernel function 30x and Change N values
+    // Perform x86-64 Kernel
+    unsigned __int64 start_time_asm, end_time_asm;
+    double total_cpu_time_ASM;
+
+    start_time_asm = __rdtsc();
+
     for (int i = 0; i < 30; ++i) {
         daxpy_asm(n, A, X, Y, Z_asm);
     }
 
-    end_time = clock();
-    total_cpu_time_ASM = ((double)(end_time - start_time)) / CLOCKS_PER_SEC / 30.0;
-
-    printf("\n\nASM Execution time: %9f seconds\n", total_cpu_time_ASM);
+    end_time_asm = __rdtsc();
+    total_cpu_time_ASM = (double)(end_time_asm - start_time_asm) / 30.0;
+    double execution_time_seconds_asm = total_cpu_time_ASM / cpu_frequency;
 
     printf("ASM Kernel Outputs: \n");
     print_outputs(n, Z_asm);
+
+    printf("ASM Total Cycles: %.9f cycles\n", total_cpu_time_ASM);
+    printf("ASM Execution time: %.9f seconds\n", execution_time_seconds_asm);;
     
     // Validate the results 
     printf("\n\nValidating the results...\n");
