@@ -6,14 +6,14 @@
 
 ## DAXPY Function implemented on a C Kernel and x86-64 Assembly Kernel was tested in both Debug Mode and Release Mode across different sizes of input vectors.
 ### Debug Mode Screenshots
-![Vector Size: 2-20](Screenshots/2^20_debug.png)
-![Vector Size: 2-20](Screenshots/2^24_debug.png)
-![Vector Size: 2-20](Screenshots/2^27_debug.png)
+![Vector Size: 2-20](screenshots/2^20_debug.png)
+![Vector Size: 2-20](screenshots/2^24_debug.png)
+![Vector Size: 2-20](screenshots/2^27_debug.png)
 
 ### Release Mode Screenshots
-![Vector Size: 2-20](Screenshots/2^20_release.png)
-![Vector Size: 2-20](Screenshots/2^24_release.png)
-![Vector Size: 2-20](Screenshots/2^27_release.png)
+![Vector Size: 2-20](screenshots/2^20_release.png)
+![Vector Size: 2-20](screenshots/2^24_release.png)
+![Vector Size: 2-20](screenshots/2^27_release.png)
 
 The performance of the two kernels was tested on the DAXPY Function with different vector sizes:
 
