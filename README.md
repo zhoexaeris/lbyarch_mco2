@@ -15,13 +15,11 @@
 ![Vector Size: 2-20](screenshots/2^24_release.png)
 ![Vector Size: 2-20](screenshots/2^27_release.png)
 
+## Demo/ Analysis / Comparison
 The performance of the two kernels was tested on the DAXPY Function with different vector sizes:
-
 - 2^20 (or 1048576)
 - 2^24 (or 16777216)
 - 2^27 (or 134217728)
-
-## Demo/ Analysis / Comparison
 
 <table>
     <thead>
@@ -44,21 +42,21 @@ The performance of the two kernels was tested on the DAXPY Function with differe
         </tr>
         <tr>
             <td>Debug Mode</td>
-            <td>x</td>
-            <td>o</td>
-            <td>x</td>
-            <td>o</td>
-            <td>x</td>
-            <td>o</td>
+            <td>0.005488427</td>
+            <td>0.002741210</td>
+            <td>0.084172490</td>
+            <td>0.043751963</td>
+            <td>0.687030793</td>
+            <td>0.349576390</td>
         </tr>
         <tr>
             <td>Release Mode</td>
-            <td>x</td>
-            <td>o</td>
-            <td>x</td>
-            <td>0</td>
-            <td>x</td>
-            <td>0</td>
+            <td>0.003314133</td>
+            <td>0.003064247</td>
+            <td>0.043285167</td>
+            <td>0.043944323</td>
+            <td>0.405919103</td>
+            <td>0.498659870</td>
         </tr>
     </tbody>
 </table>
