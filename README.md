@@ -61,7 +61,7 @@ The performance of the two kernels was tested on the DAXPY Function with differe
     </tbody>
 </table>
 
-Lorem Ipsum
+Based on the results, it suggest that assembly implementation provides  better performance compared to the C implementation for the DAXPY kernel, especially when compiled with optimizations enabled (Release Mode). This is because of the low-level control and optimized instruction sequences facilitated in x86-64 programming. On the other hand, the release configuation showed a noticeable improvement in the performance for both C and x86-64 implementations, which is expected because this setting enables compiler optimizations. Lastly, for the overall scaling performance of the vector size, it can be seen that as the vector size increases, the execution time also increases for both implementations. However, the assembly implementation consistently maintains its performance advantage over the C implementation across all vector sizes.
 
 
 
