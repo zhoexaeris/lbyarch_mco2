@@ -21,7 +21,7 @@ daxpy_asm:
 
 daxpy_loop: 
 
-    cmp rdi, 10                     ; If rdi == 10, then end the program
+    cmp rdi, rcx                     ; If rdi == 10, then end the program
     je daxpy_end
 
     movsd xmm10, [r8+rdi*8]         ; Initialize X[i] as xmm10

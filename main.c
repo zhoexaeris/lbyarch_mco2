@@ -90,7 +90,7 @@ int main() {
     // Validate the results 
     printf("\n\nValidating the results...\n");
     bool is_correct = true;
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < n; ++i) {
 		if (Z_c[i] != Z_asm[i]) {
 			is_correct = false;
 			break;
