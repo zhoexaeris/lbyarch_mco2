@@ -21,7 +21,7 @@ daxpy_asm:
 
 daxpy_loop: 
 
-    cmp rdi, rcx                     ; If rdi == 10, then end the program
+    cmp rdi, rcx                     ; rx = pointer to N
     je daxpy_end
 
     movsd xmm10, [r8+rdi*8]         ; Initialize X[i] as xmm10
@@ -30,7 +30,7 @@ daxpy_loop:
     movsd xmm11, [r9+rdi*8]         ; Initialize Y[i] as xmm11
     addsd xmm10, xmm11              ; A*X[i] + Y[i]
     
-    movsd [rsi+rdi*8], xmm10               ; Move the result (Z) to xmm0 (return)
+    movsd [rsi+rdi*8], xmm10               ; Move the result of xmm10 to the ith address of the Z vector
 
     inc rdi
     jmp daxpy_loop

@@ -26,7 +26,7 @@ void print_outputs(int n, double* Z) {
 }
 int main() {
 
-    int n = 2 << 20; // size of vector n (2^n)
+    int n = 2 << 15; // size of vector n (2^n)
 
     // Initialize variables
     double A = 2.0;
@@ -48,8 +48,7 @@ int main() {
 
     // start clock cycle
     start_time_c = __rdtsc();
-
-    for (int i = 0; i < 30; ++i) {
+    for (int i = 0; i < n; ++i) {
         daxpy_c(n, A, X, Y, Z_c);
     }
 
@@ -73,7 +72,7 @@ int main() {
 
     start_time_asm = __rdtsc();
 
-    for (int i = 0; i < 30; ++i) {
+    for (int i = 0; i < n; ++i) {
         daxpy_asm(n, A, X, Y, Z_asm);
     }
 
