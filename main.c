@@ -1,3 +1,7 @@
+// GON GON, ZHOE AERIS F.
+// RANA, LUIS MIGUEL
+// LBYARCH S15
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -27,7 +31,7 @@ void print_outputs(int n, double* Z) {
 }
 int main() {
 
-    int exponent = 20;
+    int exponent = 27;
     int n = 2 << exponent; // size of vector n (2^n)
     printf("N: 2^%d (%d)\n\n", exponent, n);
 
@@ -76,8 +80,9 @@ int main() {
     double total_cpu_time_ASM = 0.0;
     
 
+    printf("Average Execution Times:\n");
+
     // Perform C Kernel
-    printf("C Kernel Execution Times:\n");
     for (int i = 0; i < 30; ++i) {
         LARGE_INTEGER start_time_c, end_time_c;
 
@@ -87,12 +92,10 @@ int main() {
 
         double execution_time_seconds_c = (double)(end_time_c.QuadPart - start_time_c.QuadPart) / cpu_frequency;
         total_cpu_time_C += execution_time_seconds_c;
-        printf("Run %d: %.9f seconds\n", i + 1, execution_time_seconds_c);
     }
-    printf("Average C Kernel Execution Time: %.9f seconds\n", total_cpu_time_C / 30.0);
+    printf("C:   %.9f seconds\n", total_cpu_time_C / 30.0);
 
     // Perform x86-64 Kernel
-    printf("\nAssembly Kernel Execution Times:\n");
     for (int i = 0; i < 30; ++i) {
         LARGE_INTEGER start_time_asm, end_time_asm;
 
@@ -102,12 +105,11 @@ int main() {
 
         double execution_time_seconds_ASM = (double)(end_time_asm.QuadPart - start_time_asm.QuadPart) / cpu_frequency;
         total_cpu_time_ASM += execution_time_seconds_ASM;
-        printf("Run %d: %.9f seconds\n", i + 1, execution_time_seconds_ASM);
     }
-    printf("Average Assembly Kernel Execution Time: %.9f seconds\n", total_cpu_time_ASM / 30.0);
+    printf("ASM: %.9f seconds\n", total_cpu_time_ASM / 30.0);
 
     // Validate the results 
-    printf("\n\nValidating the results...\n");
+    printf("\nValidating the results...\n");
     bool is_correct = true;
     long int diff = 0;
     for (int i = 0; i < n; ++i) {
@@ -126,17 +128,11 @@ int main() {
         printf("Results are incorrect\n");
     }
 
-    /*printf("\nTotal Cycles:\n");
-    printf("C:   %.9f cycles \n", total_cpu_time_C);
-    printf("ASM: %.9f cycles \n", total_cpu_time_ASM);
-
-    printf("\nTotal Time:\n");
-    printf("C:   %.9f seconds \n", execution_time_seconds_c);
-    printf("ASM: %.9f seconds \n", execution_time_seconds_ASM);
-
-    printf("\nAverage Time:\n");
-    printf("C:   %.9f seconds \n", execution_time_seconds_c);
-    printf("ASM: %.9f seconds \n", execution_time_seconds_ASM);*/
+    printf("\nFirst Iteration Results of Z:\n");
+    printf("C  : ");
+    print_outputs(n, Z_c);
+    printf("ASM: ");
+    print_outputs(n, Z_asm);
 
     // free allocated memory
     free(X);
