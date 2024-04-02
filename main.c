@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include <windows.h>
 
 // x86-64 kernel function
 extern void daxpy_asm(int n, double A, double* X, double* Y, double* Z);
@@ -26,7 +27,7 @@ void print_outputs(int n, double* Z) {
 }
 int main() {
 
-    int exponent = 10;
+    int exponent = 20;
     int n = 2 << exponent; // size of vector n (2^n)
     printf("N: 2^%d (%d)\n", exponent, n);
 
@@ -67,44 +68,43 @@ int main() {
     }
     printf("\n");
 
+    // get elapsed time
+    LARGE_INTEGER frequency;
+    QueryPerformanceFrequency(&frequency);
+    double cpu_frequency = (double)frequency.QuadPart;
+
+    // Perform x86-64 Kernel
+    LARGE_INTEGER start_time_asm, end_time_asm;
+    double total_cpu_time_ASM;
+
+    QueryPerformanceCounter(&start_time_asm);
+    daxpy_asm(n, A, X, Y, Z_asm);
+
+    QueryPerformanceCounter(&end_time_asm);
+    total_cpu_time_ASM = (double)(end_time_asm.QuadPart - start_time_asm.QuadPart);
+    double execution_time_seconds_ASM = total_cpu_time_ASM / cpu_frequency;
+
+    printf("Output Z (ASM): ");
+    print_outputs(n, Z_asm);
+
     // Perform C Kernel
-    unsigned __int64 start_time_c, end_time_c;
+    LARGE_INTEGER start_time_c, end_time_c;
     double total_cpu_time_C;
 
     // start clock cycle
-    start_time_c = __rdtsc();
-    for (int i = 0; i < n; ++i) {
-        daxpy_c(n, A, X, Y, Z_c);
-    }
+    QueryPerformanceCounter(&start_time_c);
+    daxpy_c(n, A, X, Y, Z_c);
 
     // end clock cycle
-    end_time_c = __rdtsc();
+    QueryPerformanceCounter(&end_time_c);
 
     // compute for total clock cycle and convert to seconds
-    total_cpu_time_C = (double)(end_time_c - start_time_c) / 30.0;
-    double cpu_frequency = 2.9e9; // change to your CPU base speed
+    total_cpu_time_C = (double)(end_time_c.QuadPart - start_time_c.QuadPart);
     double execution_time_seconds_c = total_cpu_time_C / cpu_frequency;
 
     printf("Output Z (C): ");
     print_outputs(n, Z_c);
 
-    // Perform x86-64 Kernel
-    unsigned __int64 start_time_asm, end_time_asm;
-    double total_cpu_time_ASM;
-
-    start_time_asm = __rdtsc();
-
-    for (int i = 0; i < n; ++i) {
-        daxpy_asm(n, A, X, Y, Z_asm);
-    }
-
-    end_time_asm = __rdtsc();
-    total_cpu_time_ASM = (double)(end_time_asm - start_time_asm) / 30.0;
-    double execution_time_seconds_ASM = total_cpu_time_ASM / cpu_frequency;
-
-    printf("Output Z (ASM): ");
-    print_outputs(n, Z_asm);
-    
     // Validate the results 
     printf("\nValidating the results...\n");
     bool is_correct = true;
