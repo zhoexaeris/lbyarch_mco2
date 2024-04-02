@@ -1,8 +1,8 @@
 
 # DAXPY Kernel x86-64 and C Implementation & Performance Comparison | LBYARCH - S15
 ## Authors
-- [@luii-hub](https://github.com/luii-hub) 
-- [@zhoeaeris](https://github.com/zhoexaeris)
+- Luis Miguel Rana [@luii-hub](https://github.com/luii-hub) 
+- Zhoe Aeris F. Gon Gon[@zhoeaeris](https://github.com/zhoexaeris)
 
 ## DAXPY Function implemented on a C Kernel and x86-64 Assembly Kernel was tested in both Debug Mode and Release Mode across different sizes of input vectors.
 ### Debug Mode Screenshots
@@ -24,7 +24,7 @@ The performance of the two kernels was tested on the DAXPY Function with differe
 <table>
     <thead>
         <tr>
-            <td>n (Size of X)</td>
+            <td>n</td>
             <td colspan=2 style="text-align: center;">2^20 (1,048,576)</td>
             <td colspan=2 style="text-align: center;">2^24 (16,777,216)</td>
             <td colspan=2 style="text-align: center;">2^27 (134,217,728)</td>
