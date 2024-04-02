@@ -29,7 +29,7 @@ int main() {
 
     int exponent = 20;
     int n = 2 << exponent; // size of vector n (2^n)
-    printf("N: 2^%d (%d)\n", exponent, n);
+    printf("N: 2^%d (%d)\n\n", exponent, n);
 
     // Initialize variables
     double A = 2.0;
@@ -37,7 +37,7 @@ int main() {
     double* Y = (double*)malloc(n * sizeof(double));
     double* Z_c = (double*)malloc(n * sizeof(double));
     double* Z_asm = (double*)malloc(n * sizeof(double));
-    printf("Input A: %.1f\n", A);
+    printf("A --> %.1f\n", A);
 
     // Initialize X and Y for random values
     srand(time(NULL));
@@ -47,7 +47,7 @@ int main() {
     }
 
     // print first 10 elements of X and Y
-    printf("Input X: ");
+    printf("X --> ");
     for (int i = 0; i < 10; ++i) {
         if (i < 9) {
             printf("%f | ", X[i]);
@@ -57,7 +57,7 @@ int main() {
         }
     }
 
-    printf("Input Y: ");
+    printf("Y --> ");
     for (int i = 0; i < 10; ++i) {
         if (i < 9) {
             printf("%f | ", Y[i]);
@@ -72,41 +72,42 @@ int main() {
     LARGE_INTEGER frequency;
     QueryPerformanceFrequency(&frequency);
     double cpu_frequency = (double)frequency.QuadPart;
-
-    // Perform x86-64 Kernel
-    LARGE_INTEGER start_time_asm, end_time_asm;
-    double total_cpu_time_ASM;
-
-    QueryPerformanceCounter(&start_time_asm);
-    daxpy_asm(n, A, X, Y, Z_asm);
-
-    QueryPerformanceCounter(&end_time_asm);
-    total_cpu_time_ASM = (double)(end_time_asm.QuadPart - start_time_asm.QuadPart);
-    double execution_time_seconds_ASM = total_cpu_time_ASM / cpu_frequency;
-
-    printf("Output Z (ASM): ");
-    print_outputs(n, Z_asm);
+    double total_cpu_time_C = 0.0;
+    double total_cpu_time_ASM = 0.0;
+    
 
     // Perform C Kernel
-    LARGE_INTEGER start_time_c, end_time_c;
-    double total_cpu_time_C;
+    printf("C Kernel Execution Times:\n");
+    for (int i = 0; i < 30; ++i) {
+        LARGE_INTEGER start_time_c, end_time_c;
 
-    // start clock cycle
-    QueryPerformanceCounter(&start_time_c);
-    daxpy_c(n, A, X, Y, Z_c);
+        QueryPerformanceCounter(&start_time_c);
+        daxpy_c(n, A, X, Y, Z_c);
+        QueryPerformanceCounter(&end_time_c);
 
-    // end clock cycle
-    QueryPerformanceCounter(&end_time_c);
+        double execution_time_seconds_c = (double)(end_time_c.QuadPart - start_time_c.QuadPart) / cpu_frequency;
+        total_cpu_time_C += execution_time_seconds_c;
+        printf("Run %d: %.9f seconds\n", i + 1, execution_time_seconds_c);
+    }
+    printf("Average C Kernel Execution Time: %.9f seconds\n", total_cpu_time_C / 30.0);
 
-    // compute for total clock cycle and convert to seconds
-    total_cpu_time_C = (double)(end_time_c.QuadPart - start_time_c.QuadPart);
-    double execution_time_seconds_c = total_cpu_time_C / cpu_frequency;
+    // Perform x86-64 Kernel
+    printf("\nAssembly Kernel Execution Times:\n");
+    for (int i = 0; i < 30; ++i) {
+        LARGE_INTEGER start_time_asm, end_time_asm;
 
-    printf("Output Z (C): ");
-    print_outputs(n, Z_c);
+        QueryPerformanceCounter(&start_time_asm);
+        daxpy_asm(n, A, X, Y, Z_asm);
+        QueryPerformanceCounter(&end_time_asm);
+
+        double execution_time_seconds_ASM = (double)(end_time_asm.QuadPart - start_time_asm.QuadPart) / cpu_frequency;
+        total_cpu_time_ASM += execution_time_seconds_ASM;
+        printf("Run %d: %.9f seconds\n", i + 1, execution_time_seconds_ASM);
+    }
+    printf("Average Assembly Kernel Execution Time: %.9f seconds\n", total_cpu_time_ASM / 30.0);
 
     // Validate the results 
-    printf("\nValidating the results...\n");
+    printf("\n\nValidating the results...\n");
     bool is_correct = true;
     long int diff = 0;
     for (int i = 0; i < n; ++i) {
@@ -125,14 +126,17 @@ int main() {
         printf("Results are incorrect\n");
     }
 
-    printf("\nTotal Cycles:\n");
-    printf("C: %.9f cycles \n", total_cpu_time_C);
+    /*printf("\nTotal Cycles:\n");
+    printf("C:   %.9f cycles \n", total_cpu_time_C);
     printf("ASM: %.9f cycles \n", total_cpu_time_ASM);
 
     printf("\nTotal Time:\n");
-    printf("C: %.9f seconds \n", execution_time_seconds_c);
+    printf("C:   %.9f seconds \n", execution_time_seconds_c);
     printf("ASM: %.9f seconds \n", execution_time_seconds_ASM);
 
+    printf("\nAverage Time:\n");
+    printf("C:   %.9f seconds \n", execution_time_seconds_c);
+    printf("ASM: %.9f seconds \n", execution_time_seconds_ASM);*/
 
     // free allocated memory
     free(X);
