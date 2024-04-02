@@ -26,7 +26,9 @@ void print_outputs(int n, double* Z) {
 }
 int main() {
 
-    int n = 2 << 15; // size of vector n (2^n)
+    int exponent = 15;
+    int n = 2 << exponent; // size of vector n (2^n)
+    printf("N: 2^%d (%d)\n\n", exponent, n);
 
     // Initialize variables
     double A = 2.0;
