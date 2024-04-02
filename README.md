@@ -23,6 +23,46 @@ The performance of the two kernels was tested on the DAXPY Function with differe
 
 ## Demo/ Analysis / Comparison
 
+<table>
+    <thead>
+        <tr>
+            <td>n (Size of X)</td>
+            <td colspan=2 style="text-align: center;">2^20 (1,048,576)</td>
+            <td colspan=2 style="text-align: center;">2^24 (16,777,216)</td>
+            <td colspan=2 style="text-align: center;">2^27 (134,217,728)</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Kernel</td>
+            <td style="text-align: center;">C</td>
+            <td style="text-align: center;">ASM</td>
+            <td style="text-align: center;">C</td>
+            <td style="text-align: center;">ASM</td>
+            <td style="text-align: center;">C</td>
+            <td style="text-align: center;">ASM</td>
+        </tr>
+        <tr>
+            <td>Debug Mode</td>
+            <td>x</td>
+            <td>o</td>
+            <td>x</td>
+            <td>o</td>
+            <td>x</td>
+            <td>o</td>
+        </tr>
+        <tr>
+            <td>Release Mode</td>
+            <td>x</td>
+            <td>o</td>
+            <td>x</td>
+            <td>0</td>
+            <td>x</td>
+            <td>0</td>
+        </tr>
+    </tbody>
+</table>
+
 Lorem Ipsum
 
 
