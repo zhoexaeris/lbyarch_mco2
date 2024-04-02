@@ -17,7 +17,7 @@ void daxpy_c(int n, double A, double* X, double* Y, double* Z) {
 void print_outputs(int n, double* Z) {
 	for (int i = 0; i < 10; ++i) {
         if (i < 9) {
-            printf("%f |", Z[i]);
+            printf("%f | ", Z[i]);
         }
         else {
             printf("%f \n", Z[i]);
@@ -26,9 +26,9 @@ void print_outputs(int n, double* Z) {
 }
 int main() {
 
-    int exponent = 15;
+    int exponent = 10;
     int n = 2 << exponent; // size of vector n (2^n)
-    printf("N: 2^%d (%d)\n\n", exponent, n);
+    printf("N: 2^%d (%d)\n", exponent, n);
 
     // Initialize variables
     double A = 2.0;
@@ -43,6 +43,28 @@ int main() {
         X[i] = (double)rand() / RAND_MAX;
         Y[i] = (double)rand() / RAND_MAX;
     }
+
+    // print first 10 elements of X and Y
+    printf("Input X: ");
+    for (int i = 0; i < 10; ++i) {
+        if (i < 9) {
+            printf("%f | ", X[i]);
+        }
+        else {
+            printf("%f \n", X[i]);
+        }
+    }
+
+    printf("Input Y: ");
+    for (int i = 0; i < 10; ++i) {
+        if (i < 9) {
+            printf("%f | ", Y[i]);
+        }
+        else {
+            printf("%f \n", Y[i]);
+        }
+    }
+    printf("\n");
 
     // Perform C Kernel
     unsigned __int64 start_time_c, end_time_c;
@@ -62,11 +84,8 @@ int main() {
     double cpu_frequency = 2.9e9; // change to your CPU base speed
     double execution_time_seconds_c = total_cpu_time_C / cpu_frequency;
 
-    printf("C Kernel Outputs: \n");
+    printf("Output Z (C): ");
     print_outputs(n, Z_c);
-
-    printf("C Total Cycles: %.9f cycles \n", total_cpu_time_C);
-    printf("C Execution time: %.9f seconds\n\n", execution_time_seconds_c);
 
     // Perform x86-64 Kernel
     unsigned __int64 start_time_asm, end_time_asm;
@@ -80,29 +99,39 @@ int main() {
 
     end_time_asm = __rdtsc();
     total_cpu_time_ASM = (double)(end_time_asm - start_time_asm) / 30.0;
-    double execution_time_seconds_asm = total_cpu_time_ASM / cpu_frequency;
+    double execution_time_seconds_ASM = total_cpu_time_ASM / cpu_frequency;
 
-    printf("ASM Kernel Outputs: \n");
+    printf("Output Z (ASM): ");
     print_outputs(n, Z_asm);
-
-    printf("ASM Total Cycles: %.9f cycles\n", total_cpu_time_ASM);
-    printf("ASM Execution time: %.9f seconds\n", execution_time_seconds_asm);;
     
     // Validate the results 
-    printf("\n\nValidating the results...\n");
+    printf("\nValidating the results...\n");
     bool is_correct = true;
+    long int diff = 0;
     for (int i = 0; i < n; ++i) {
-		if (Z_c[i] != Z_asm[i]) {
-			is_correct = false;
-			break;
-		}
-	}
+        if (Z_c[i] != Z_asm[i]) {
+            is_correct = false;
+            diff++;
+            break;
+        }
+    }
     if (is_correct) {
+        printf("%ld out of %ld elements are equal.\n", n - diff, n);
         printf("Results are correct\n");
     }
     else {
+        printf("%ld out of %ld elements are not equal.\n", n - diff, n);
         printf("Results are incorrect\n");
     }
+
+    printf("\nTotal Cycles:\n");
+    printf("C: %.9f cycles \n", total_cpu_time_C);
+    printf("ASM: %.9f cycles \n", total_cpu_time_ASM);
+
+    printf("\nTotal Time:\n");
+    printf("C: %.9f seconds \n", execution_time_seconds_c);
+    printf("ASM: %.9f seconds \n", execution_time_seconds_ASM);
+
 
     // free allocated memory
     free(X);
